@@ -1,0 +1,14 @@
+{
+  "name": "store-analytics",
+  "version": "1.0.0",
+  "description": "TypeScript Store Analytics — RAM0541 Ülesanne 2",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "report": "tsc && node dist/report.js",
+    "dev:report": "npx tsx src/report.ts"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.3"
+  }
+}
