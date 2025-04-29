@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Store Analytics</title>
+  <style>
+    /* ── RESET & BASE ─────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: #f0f4f8;
+      color: #2d3748;
+      min-height: 100vh;
+    }
+
+    #app {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 0 1rem 3rem;
+    }
+
+    /* ── HEADER ──────────────────────────────────────────── */
+    header {
+      text-align: center;
+      padding: 2rem 0 1.75rem;
+    }
+
+    h1 {
+      font-size: 2rem;
+      font-weight: 800;
+      color: #1a202c;
+      letter-spacing: -0.5px;
+    }
+
+    /* ── FORM SECTION ────────────────────────────────────── */
+    .form-section {
+      background: #ffffff;
+      border-radius: 12px;
+      padding: 1.5rem 1.75rem;
+      box-shadow: 0 1px 6px rgba(0, 0, 0, 0.08);
+      margin-bottom: 1.25rem;
+    }
+
+    .form-section h2 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #1a202c;
+      margin-bottom: 1rem;
+    }
+
+    .field {
+      margin-bottom: 0.75rem;
+    }
+
+    label {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #4a5568;
+      margin-bottom: 0.3rem;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    select {
+      width: 100%;
+      padding: 0.5rem 0.75rem;
+      border: 1.5px solid #cbd5e0;
+      border-radius: 7px;
+      font-size: 0.9rem;
+      color: #2d3748;
+      background: #fff;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+
+    input:focus, select:focus {
+      outline: none;
+      border-color: #4299e1;
+      box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.15);
+    }
+
+    .btn-add {
+      width: 100%;
+      padding: 0.65rem 1rem;
+      background: #4299e1;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 0.35rem;
+      transition: background 0.15s;
+    }
+
+    .btn-add:hover  { background: #3182ce; }
+    .btn-add:active { background: #2b6cb0; }
+
+    /* ── ERROR BOX ───────────────────────────────────────── */
+    .error-box {
+      background: #fff5f5;
+      border: 1.5px solid #fc8181;
+      border-radius: 7px;
+      padding: 0.5rem 0.75rem;
+      margin-bottom: 0.6rem;
+      font-size: 0.83rem;
+      color: #c53030;
+    }
+
+    .error-box p + p { margin-top: 0.2rem; }
+    .hidden          { display: none !important; }
+
+    /* ── CONTROLS ────────────────────────────────────────── */
+    .controls {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1.25rem;
+      flex-wrap: wrap;
+    }
+
+    .control-group {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      min-width: 190px;
+    }
+
+    /* ── PRODUCT GRID ────────────────────────────────────── */
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 1rem;
+    }
+
+    /* ── PRODUCT CARD ────────────────────────────────────── */
+    .product-card {
+      background: #ffffff;
+      border-radius: 10px;
+      padding: 1rem 1.1rem 1.1rem;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+
+    .product-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 14px rgba(0, 0, 0, 0.12);
+    }
+
+    .product-card h3 {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #1a202c;
+      margin-bottom: 0.35rem;
+    }
+
+    .card-category  { font-size: 0.82rem; color: #718096; margin-bottom: 0.15rem; }
+    .card-available { font-size: 0.82rem; color: #4a5568; margin-bottom: 0.4rem; }
+
+    .card-price {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: #38b2ac;
+      margin-bottom: 0.15rem;
+    }
+
+    /* ── STATUS BADGE ────────────────────────────────────── */
+    .status-badge {
+      display: inline-block;
+      padding: 0.2rem 0.6rem;
+      border-radius: 999px;
+      font-size: 0.74rem;
+      font-weight: 700;
+      margin-bottom: 0.45rem;
+    }
+
+    .status-in_stock { background: #c6f6d5; color: #22543d; }
+    .status-low      { background: #fefcbf; color: #744210; }
+    .status-out      { background: #fed7d7; color: #9b2c2c; }
+
+    /* ── SPECS ───────────────────────────────────────────── */
+    .card-specs {
+      font-size: 0.77rem;
+      color: #718096;
+      word-break: break-word;
+      margin-top: 0.15rem;
+    }
+
+    /* ── EMPTY STATE ─────────────────────────────────────── */
+    .empty-msg {
+      text-align: center;
+      color: #a0aec0;
+      padding: 2rem;
+      grid-column: 1 / -1;
+      font-size: 0.95rem;
+    }
+
+    /* ── RESPONSIVE ──────────────────────────────────────── */
+    @media (max-width: 500px) {
+      h1 { font-size: 1.5rem; }
+      .form-section { padding: 1rem; }
+    }
+  </style>
+</head>
+<body>
+  <div id="app"></div>
+  <script type="module" src="./dist/app.js"></script>
+</body>
+</html>
